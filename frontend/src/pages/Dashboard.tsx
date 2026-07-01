@@ -2,12 +2,14 @@ import AgentCard from "../components/AgentCard";
 import Workflow from "../components/Workflow";
 import Terminal from "../components/Terminal";
 import MemoryPanel from "../components/MemoryPanel";
+import type { LoopEvent } from "../hooks/useAgentLoop";
 
 type DashboardProps = {
-  result: any;
+  events: LoopEvent[];
+  running: boolean;
 };
 
-const Dashboard = ({ result }: DashboardProps) => {
+const Dashboard = ({ events, running }: DashboardProps) => {
   return (
     <section className="p-8">
       <div className="mb-8 rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900 to-slate-800 p-8 shadow-2xl">
@@ -20,38 +22,25 @@ const Dashboard = ({ result }: DashboardProps) => {
         </h1>
 
         <p className="mt-4 max-w-2xl text-slate-400">
-          Aegis coordinates planner, memory, research, reasoning, critique,
-          improvement, verification, and learning agents.
+          Live WebSocket agent workflow is now connected.
         </p>
       </div>
 
       <div className="mb-8 grid grid-cols-4 gap-5">
-        <AgentCard name="Planner" status="Ready" score="98%" />
-        <AgentCard name="Memory" status="Ready" score="92%" />
-        <AgentCard name="Reasoning" status="Ready" score="95%" />
-        <AgentCard name="Critic" status="Idle" score="89%" />
+        <AgentCard name="Planner" status={running ? "Running" : "Ready"} score="98%" />
+        <AgentCard name="Memory" status={running ? "Running" : "Ready"} score="92%" />
+        <AgentCard name="Reasoning" status={running ? "Running" : "Ready"} score="95%" />
+        <AgentCard name="Critic" status={running ? "Running" : "Idle"} score="89%" />
       </div>
 
       <div className="mb-8">
-        <Workflow />
+        <Workflow events={events} />
       </div>
 
       <div className="grid grid-cols-2 gap-5">
-        <Terminal />
+        <Terminal events={events} />
         <MemoryPanel />
       </div>
-
-      {result && (
-        <div className="mt-8 rounded-2xl border border-cyan-500/30 bg-slate-900 p-6">
-          <h2 className="mb-4 text-xl font-bold text-cyan-300">
-            Backend Response
-          </h2>
-
-          <pre className="max-h-96 overflow-auto text-sm text-green-300">
-            {JSON.stringify(result, null, 2)}
-          </pre>
-        </div>
-      )}
     </section>
   );
 };
