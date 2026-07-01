@@ -1,8 +1,9 @@
 type TopBarProps = {
   onStartLoop: () => void;
+  running: boolean;
 };
 
-const TopBar = ({ onStartLoop }: TopBarProps) => {
+const TopBar = ({ onStartLoop, running }: TopBarProps) => {
   return (
     <header className="flex h-20 items-center justify-between border-b border-white/10 bg-slate-950/70 px-8 backdrop-blur-xl">
       <div>
@@ -17,9 +18,10 @@ const TopBar = ({ onStartLoop }: TopBarProps) => {
 
         <button
           onClick={onStartLoop}
-          className="rounded-xl bg-cyan-500 px-5 py-2 font-bold text-slate-950 hover:bg-cyan-400"
+          disabled={running}
+          className="rounded-xl bg-cyan-500 px-5 py-2 font-bold text-slate-950 hover:bg-cyan-400 disabled:opacity-50"
         >
-          Start Loop
+          {running ? "Running..." : "Start Loop"}
         </button>
       </div>
     </header>

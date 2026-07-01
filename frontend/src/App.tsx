@@ -1,24 +1,15 @@
-import { useState } from "react";
-
 import Sidebar from "./components/Sidebar";
 import TopBar from "./components/TopBar";
 import Dashboard from "./pages/Dashboard";
-
-import { startLoop } from "./services/api";
+import { useAgentLoop } from "./hooks/useAgentLoop";
 
 function App() {
-  const [result, setResult] = useState<any>(null);
+  const { events, running, startLoop } = useAgentLoop();
 
-  async function handleStartLoop() {
-    try {
-      const data = await startLoop("Build an AI Operating System");
-      console.log(data);
-      setResult(data);
-    } catch (err) {
-      console.error(err);
-      alert("Unable to connect to backend.");
-    }
-  }
+  const handleStartLoop = () => {
+    console.log("Start Loop clicked");
+    startLoop("Build an AI Operating System");
+  };
 
   return (
     <div className="min-h-screen bg-slate-950 text-white">
@@ -26,9 +17,15 @@ function App() {
         <Sidebar />
 
         <main className="flex-1">
-          <TopBar onStartLoop={handleStartLoop} />
+          <TopBar
+            onStartLoop={handleStartLoop}
+            running={running}
+          />
 
-          <Dashboard result={result} />
+          <Dashboard
+            events={events}
+            running={running}
+          />
         </main>
       </div>
     </div>
